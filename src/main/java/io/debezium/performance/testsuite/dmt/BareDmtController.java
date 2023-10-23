@@ -11,6 +11,7 @@ import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -24,12 +25,19 @@ public class BareDmtController implements DmtController {
 
     @Override
     public LoadResult generateSqlBatchLoad(int count, int maxRows) {
-        return null;
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("count", String.valueOf(count));
+        queryParameters.put("maxRows", String.valueOf(maxRows));
+        return useCustomPostEndpoint("GenerateBatchLoad", queryParameters);
     }
 
     @Override
     public LoadResult generateMongoBulkLoad(int count, int maxRows, int messageSize) {
-        return null;
+        Map<String, String> queryParameters = new HashMap<>();
+        queryParameters.put("count", String.valueOf(count));
+        queryParameters.put("maxRows", String.valueOf(maxRows));
+        queryParameters.put("messageSize", String.valueOf(messageSize));
+        return useCustomPostEndpoint("GenerateMongoBulkSizedLoad", queryParameters);
     }
 
     @Override
