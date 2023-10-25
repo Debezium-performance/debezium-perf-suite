@@ -25,6 +25,7 @@
 
     <dmt.url></dmt.url>
     <kafka.bootstrap.servers></kafka.bootstrap.servers>
+    <kafka.topic></kafka.topic>
   </properties>
 
   <dependencies>
@@ -52,6 +53,13 @@
       <artifactId>slf4j-api</artifactId>
       <version>${org.slf4j.version}</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${org.slf4j.version}</version>
+    </dependency>
+
 
     <dependency>
       <groupId>io.debezium.performance</groupId>
@@ -108,6 +116,7 @@
             <systemPropertyVariables>
               <test.dmt.url>${dmt.url}</test.dmt.url>
               <test.kafka.bootstrap.servers>${kafka.bootstrap.servers}</test.kafka.bootstrap.servers>
+              <test.kafka.topic>${kafka.topic}</test.kafka.topic>>
             </systemPropertyVariables>
           </configuration>
           <executions>

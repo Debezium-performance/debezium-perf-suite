@@ -46,7 +46,8 @@ public class BareDmtController implements DmtController {
             LOG.error("DMT URL not specified. Cannot send request");
             throw new DmtException("DMT URL not specified. Cannot send request");
         }
-        HttpUrl.Builder httpBuilder = Objects.requireNonNull(HttpUrl.parse(DMT_URL + "/" + name)).newBuilder();
+        LOG.info(DMT_URL + "/" + name);
+        HttpUrl.Builder httpBuilder = Objects.requireNonNull(HttpUrl.parse("http://" + DMT_URL + "/Main/" + name)).newBuilder();
         for(Map.Entry<String, String> param : queryParameters.entrySet()) {
             httpBuilder.addQueryParameter(param.getKey(), param.getValue());
         }
