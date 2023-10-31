@@ -22,7 +22,16 @@ public class BareDmtController implements DmtController {
     private final OkHttpClient client;
     private final Logger LOG = LoggerFactory.getLogger(BareDmtController.class);
 
-    public BareDmtController() {
+    private static BareDmtController instance;
+
+    public static BareDmtController getInstance() {
+        if (instance == null) {
+            instance = new BareDmtController();
+        }
+        return instance;
+    }
+
+    private BareDmtController() {
         client = new OkHttpClient.Builder()
                 .readTimeout(0, TimeUnit.MILLISECONDS)
                 .build();

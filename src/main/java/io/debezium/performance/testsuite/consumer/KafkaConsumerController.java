@@ -26,9 +26,16 @@ import static org.apache.kafka.clients.consumer.ConsumerConfig.RECEIVE_BUFFER_CO
 import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
 
 public class KafkaConsumerController {
-
     private final Logger LOG = LoggerFactory.getLogger(KafkaConsumerController.class);
-    public KafkaConsumerController() {}
+    private static KafkaConsumerController instance;
+    private KafkaConsumerController() {}
+
+    public static KafkaConsumerController getInstance() {
+        if (instance == null) {
+            instance = new KafkaConsumerController();
+        }
+        return instance;
+    }
 
     public ConsumerRecords<String, String> getRecords(String topic) {
         try (Consumer<String, String> consumer = getConsumer()) {
@@ -41,16 +48,6 @@ public class KafkaConsumerController {
     public Consumer<String, String> getConsumer() {
         return new KafkaConsumer<>(getDefaultConsumerProperties());
     }
-
-//    public void assertTopicsExist(String... names) {
-//        LOG.info("Awaiting topics " + Arrays.toString(names));
-//        try (Consumer<String, String> consumer = getConsumer()) {
-//            await().atMost(scaled(2), TimeUnit.MINUTES).untilAsserted(() -> {
-//                Set<String> topics = consumer.listTopics().keySet();
-//                assertThat(topics).contains(names);
-//            });
-//        }
-//    }
 
     private Properties getDefaultConsumerProperties() {
         Properties consumerProps = new Properties();

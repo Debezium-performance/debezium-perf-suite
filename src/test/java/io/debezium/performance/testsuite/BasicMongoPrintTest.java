@@ -25,8 +25,8 @@ public class BasicMongoPrintTest {
 
     @Test
     public void BasicMongoTest() {
-        BareDmtController dmt = new BareDmtController();
-        KafkaConsumerController consumer = new KafkaConsumerController();
+        BareDmtController dmt = BareDmtController.getInstance();
+        KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(30, 10000, 2).toString());
         try {
             Thread.sleep(10000);

@@ -20,8 +20,8 @@ public class BasicSqlPrintTest {
 
     @Test
     public void BasicMysqlTest() {
-        BareDmtController dmt = new BareDmtController();
-        KafkaConsumerController consumer = new KafkaConsumerController();
+        BareDmtController dmt = BareDmtController.getInstance();
+        KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateSqlBatchLoad(30, 10000).toString());
         try {
             Thread.sleep(10000);
