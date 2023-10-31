@@ -24,26 +24,63 @@ public class BasicMongoPrintTest {
     private final Logger LOG = LoggerFactory.getLogger(BasicMongoPrintTest.class);
 
     @Test
-    public void BasicMongoTest() {
+    public void test1() {
+        int count = 100000;
+        int size = 10000;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
-        LOG.info(dmt.generateMongoBulkLoad(30, 10000, 2).toString());
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        //TODO: Change and refactor this piece of code so it works in between tests with multiple records in topics
-        Consumer<String,String> consumer1 = consumer.getConsumer();
-        consumer1.subscribe(Collections.singletonList(KAFKA_TEST_TOPIC));
-        List<ConsumerRecord<String, String>> collection = new ArrayList<>();
-        while (collection.size() < 30) {
-        ConsumerRecords<String, String> records = consumer1.poll(Duration.of(100, ChronoUnit.SECONDS));
-            records.forEach(collection::add);
-        }
-        LOG.info(String.valueOf(collection.size()));
+        LOG.info(dmt.generateMongoBulkLoad(count, 10000, size).toString());
+        List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
+        printResults(records);
+    }
+
+    @Test
+    public void test2() {
+        int count = 10000;
+        int size = 100000;
+        BareDmtController dmt = BareDmtController.getInstance();
+        KafkaConsumerController consumer = KafkaConsumerController.getInstance();
+        LOG.info(dmt.generateMongoBulkLoad(count, 10000, size).toString());
+        List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
+        printResults(records);
+    }
+
+    @Test
+    public void test3() {
+        int count = 1000;
+        int size = 1000000;
+        BareDmtController dmt = BareDmtController.getInstance();
+        KafkaConsumerController consumer = KafkaConsumerController.getInstance();
+        LOG.info(dmt.generateMongoBulkLoad(count, 10000, size).toString());
+        List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
+        printResults(records);
+    }
+
+    @Test
+    public void test4() {
+        int count = 100;
+        int size = 10000000;
+        BareDmtController dmt = BareDmtController.getInstance();
+        KafkaConsumerController consumer = KafkaConsumerController.getInstance();
+        LOG.info(dmt.generateMongoBulkLoad(count, 10000, size).toString());
+        List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
+        printResults(records);
+    }
+
+    @Test
+    public void test5() {
+        int count = 100;
+        int size = 10000000;
+        BareDmtController dmt = BareDmtController.getInstance();
+        KafkaConsumerController consumer = KafkaConsumerController.getInstance();
+        LOG.info(dmt.generateMongoBulkLoad(count, 10000, size).toString());
+        List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
+        printResults(records);
+    }
+
+    private void printResults(List<ConsumerRecord<String, String>> records){
         int i = 1;
-        for (ConsumerRecord<String, String> record : collection) {
+        for (ConsumerRecord<String, String> record : records) {
             TimeResults results;
             try {
                 results = KafkaRecordParser.parseTimeResults(record);
