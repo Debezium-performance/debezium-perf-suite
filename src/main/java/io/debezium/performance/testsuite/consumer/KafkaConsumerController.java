@@ -1,7 +1,6 @@
 package io.debezium.performance.testsuite.consumer;
 
 import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -17,7 +16,14 @@ import static io.debezium.performance.testsuite.ConfigProperties.KAFKA_BOOTSTRAP
 import static org.apache.kafka.clients.consumer.ConsumerConfig.AUTO_OFFSET_RESET_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.FETCH_MAX_BYTES_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.FETCH_MIN_BYTES_CONFIG;
 import static org.apache.kafka.clients.consumer.ConsumerConfig.GROUP_ID_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.MAX_PARTITION_FETCH_BYTES_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.RECEIVE_BUFFER_CONFIG;
+import static org.apache.kafka.clients.consumer.ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG;
 
 public class KafkaConsumerController {
 
@@ -51,10 +57,14 @@ public class KafkaConsumerController {
         consumerProps.put(BOOTSTRAP_SERVERS_CONFIG, KAFKA_BOOTSTRAP_SERVERS);
         consumerProps.put(GROUP_ID_CONFIG, "2");
         consumerProps.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
-        consumerProps.put(ENABLE_AUTO_COMMIT_CONFIG, false);
-        consumerProps.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        consumerProps.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-
+        consumerProps.put(ENABLE_AUTO_COMMIT_CONFIG, true);
+        consumerProps.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        consumerProps.put(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        consumerProps.put(MAX_PARTITION_FETCH_BYTES_CONFIG , "1073741824");
+        consumerProps.put(FETCH_MAX_BYTES_CONFIG, "1073741824");
+        consumerProps.put(FETCH_MAX_WAIT_MS_CONFIG, "10000");
+        consumerProps.put(FETCH_MIN_BYTES_CONFIG, "1073741824");
+        consumerProps.put(RECEIVE_BUFFER_CONFIG, "1073741824");
         return consumerProps;
     }
 }

@@ -14,14 +14,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static io.debezium.performance.testsuite.ConfigProperties.DMT_URL;
 
 public class BareDmtController implements DmtController {
-    private final OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client;
     private final Logger LOG = LoggerFactory.getLogger(BareDmtController.class);
 
-    public BareDmtController() {}
+    public BareDmtController() {
+        client = new OkHttpClient.Builder()
+                .readTimeout(0, TimeUnit.MILLISECONDS)
+                .build();
+    }
 
     @Override
     public LoadResult generateSqlBatchLoad(int count, int maxRows) {
