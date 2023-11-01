@@ -52,8 +52,8 @@ public class TimeResults {
         return kafkaReceiveTime - getDebeziumStartTime();
     }
 
-    public DebeziumTimestamps getDebeziumTimestamps() {
-        return debeziumTimestamps;
+    public long getDebeziumReadSpeed() {
+        return debeziumTimestamps.getDebeziumReadSpeed();
     }
 
     private String getDateFromMs(long ms) {

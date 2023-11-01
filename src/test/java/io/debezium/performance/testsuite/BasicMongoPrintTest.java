@@ -4,22 +4,15 @@ import io.debezium.performance.testsuite.consumer.KafkaConsumerController;
 import io.debezium.performance.testsuite.deserializer.KafkaRecordParser;
 import io.debezium.performance.testsuite.dmt.BareDmtController;
 import io.debezium.performance.testsuite.model.TimeResults;
-import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static io.debezium.performance.testsuite.ConfigProperties.KAFKA_TEST_TOPIC;
 
@@ -103,7 +96,7 @@ public class BasicMongoPrintTest {
             TimeResults results;
             try {
                 results = KafkaRecordParser.parseTimeResults(record);
-                dataline.add(new String[] {String.valueOf(results.getDebeziumStartTime()), String.valueOf(results.getDebeziumTimestamps().getDebeziumReadSpeed())});
+                dataline.add(new String[] {String.valueOf(results.getDebeziumStartTime()), String.valueOf(results.getDebeziumReadSpeed())});
                 dataline2.add(new String[]{String.valueOf(results.getKafkaReceiveTime()), String.valueOf(results.getDebeziumProcessSpeed())});
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
