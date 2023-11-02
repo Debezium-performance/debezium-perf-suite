@@ -134,6 +134,7 @@ public class BasicMongoPrintTest {
             }
 //            LOG.info(i++ + " " + results);
         }
+        dataLine3.add(new String[]{String.valueOf(lastSecond), String.valueOf(count)});
         try(PrintWriter pw = new PrintWriter(String.format("test_read%s.csv", testNumber))) {
             dataLine.stream()
                     .map(this::convertToCSV)
