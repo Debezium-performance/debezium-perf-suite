@@ -43,6 +43,7 @@ public class BasicMongoPrintTest {
         // count +1 because of collection create event <- NOT TRUE CURRENTLY
         List<ConsumerRecord<String, String>> records = kafkaController.getRecords(KAFKA_TEST_TOPIC, count);
         printResults(records);
+        printResultsCsv(records, 1);
     }
 
     @Test
@@ -54,6 +55,7 @@ public class BasicMongoPrintTest {
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
         printResults(records);
+        printResultsCsv(records, 2);
     }
 
     @Test
@@ -110,17 +112,17 @@ public class BasicMongoPrintTest {
         dataLine2.add(new String[]{"Kafka receive timestamp", "Debezium process speed"});
         List<String[]> dataLine3 = new ArrayList<>();
         dataLine3.add(new String[]{"Second", "Number of read messages"});
+        long lastSecond = -1L;
+        int count = 0;
+        long currentSecond;
         for (ConsumerRecord<String, String> record : records) {
             TimeResults results;
-            Long lastSecond = -1L;
-            int count = 0;
-            Long currentSecond;
             try {
                 results = KafkaRecordParser.parseTimeResults(record);
                 dataLine.add(new String[] {String.valueOf(results.getDebeziumStartTime()), String.valueOf(results.getDebeziumReadSpeed())});
                 dataLine2.add(new String[]{String.valueOf(results.getKafkaReceiveTime()), String.valueOf(results.getDebeziumProcessSpeed())});
                 currentSecond = Instant.ofEpochMilli(results.getDebeziumStartTime()).truncatedTo(ChronoUnit.SECONDS).toEpochMilli();
-                if (lastSecond.equals(currentSecond)) {
+                if (lastSecond == currentSecond) {
                     count++;
                 } else {
                     dataLine3.add(new String[]{String.valueOf(lastSecond), String.valueOf(count)});
