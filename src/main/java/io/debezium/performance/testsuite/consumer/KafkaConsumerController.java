@@ -3,6 +3,7 @@ package io.debezium.performance.testsuite.consumer;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.Config;
 import org.apache.kafka.clients.admin.ConfigEntry;
+import org.apache.kafka.clients.admin.DeleteTopicsResult;
 import org.apache.kafka.clients.admin.DescribeConfigsResult;
 import org.apache.kafka.clients.admin.DescribeTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -77,7 +78,14 @@ public class KafkaConsumerController {
             NewTopic newTopic = new NewTopic(topic, topicDescription.partitions().size(), (short) topicDescription.partitions().get(0).replicas().size());
             newTopic.configs(transformConfig(topicConfig));
             LOG.info("Starting topic deletion");
-            client.deleteTopics(Collections.singleton(topic)).all().get(100, TimeUnit.SECONDS);
+            DeleteTopicsResult result = client.deleteTopics(Collections.singleton(topic));
+            Thread.sleep(60000);
+            if (result.all().isDone()) {
+                LOG.info("Deletion complete");
+            } else {
+                LOG.info("Deletion NOT complete");
+            }
+            result.all().get(100, TimeUnit.SECONDS);
             LOG.info("Starting topic creation");
             client.createTopics(Collections.singleton(newTopic)).all().get(100, TimeUnit.SECONDS);
             LOG.info("Successfully recreated topic");
