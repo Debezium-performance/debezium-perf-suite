@@ -52,6 +52,10 @@ public class TimeResults {
         return kafkaReceiveTime - getDebeziumStartTime();
     }
 
+    public long getDebeziumReadSpeed() {
+        return debeziumTimestamps.getDebeziumReadSpeed();
+    }
+
     private String getDateFromMs(long ms) {
         Date time = new Date(ms);
         SimpleDateFormat formatter = new SimpleDateFormat("u-M-d hh:mm:ss.SSS");
