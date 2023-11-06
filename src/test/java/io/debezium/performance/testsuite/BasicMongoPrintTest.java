@@ -112,6 +112,8 @@ public class BasicMongoPrintTest {
         dataLine2.add(new String[]{"Kafka receive timestamp", "Debezium process speed"});
         List<String[]> dataLine3 = new ArrayList<>();
         dataLine3.add(new String[]{"Second", "Number of read messages"});
+        List<String[]> dataLine4 = new ArrayList<>();
+        dataLine4.add(new String[]{"Transaction timestamp", "Debezium read timestamp", "Kafka receive timestamp", "Debezium read speed","Debezium process speed "});
         long lastSecond = -1L;
         int count = 0;
         long currentSecond;
@@ -121,6 +123,13 @@ public class BasicMongoPrintTest {
                 results = KafkaRecordParser.parseTimeResults(record);
                 dataLine.add(new String[] {String.valueOf(results.getDebeziumStartTime()), String.valueOf(results.getDebeziumReadSpeed())});
                 dataLine2.add(new String[]{String.valueOf(results.getKafkaReceiveTime()), String.valueOf(results.getDebeziumProcessSpeed())});
+                dataLine4.add(new String[]{
+                        String.valueOf(results.getDatabaseTransactionTime()),
+                        String.valueOf(results.getDebeziumStartTime()),
+                        String.valueOf(results.getKafkaReceiveTime()),
+                        String.valueOf(results.getDebeziumReadSpeed()),
+                        String.valueOf(results.getDebeziumProcessSpeed()),
+                });
                 currentSecond = Instant.ofEpochMilli(results.getDebeziumStartTime()).truncatedTo(ChronoUnit.SECONDS).toEpochMilli();
                 if (lastSecond == currentSecond) {
                     count++;
@@ -135,22 +144,29 @@ public class BasicMongoPrintTest {
 //            LOG.info(i++ + " " + results);
         }
         dataLine3.add(new String[]{String.valueOf(lastSecond), String.valueOf(count)});
-        try(PrintWriter pw = new PrintWriter(String.format("test_read%s.csv", testNumber))) {
+        try(PrintWriter pw = new PrintWriter(String.format("read%s.csv", testNumber))) {
             dataLine.stream()
                     .map(this::convertToCSV)
                     .forEach(pw::println);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        try(PrintWriter pw = new PrintWriter(String.format("test_process%s.csv", testNumber))) {
+        try(PrintWriter pw = new PrintWriter(String.format("process%s.csv", testNumber))) {
             dataLine2.stream()
                     .map(this::convertToCSV)
                     .forEach(pw::println);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        try(PrintWriter pw = new PrintWriter(String.format("test_read_per_second%s.csv", testNumber))) {
+        try(PrintWriter pw = new PrintWriter(String.format("read-per-second%s.csv", testNumber))) {
             dataLine3.stream()
+                    .map(this::convertToCSV)
+                    .forEach(pw::println);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        try(PrintWriter pw = new PrintWriter(String.format("total-results%s.csv", testNumber))) {
+            dataLine4.stream()
                     .map(this::convertToCSV)
                     .forEach(pw::println);
         } catch (FileNotFoundException e) {
