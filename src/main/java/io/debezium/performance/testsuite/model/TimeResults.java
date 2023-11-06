@@ -1,7 +1,9 @@
 package io.debezium.performance.testsuite.model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class TimeResults {
     private DebeziumTimestamps debeziumTimestamps;
@@ -54,6 +56,16 @@ public class TimeResults {
 
     public long getDebeziumReadSpeed() {
         return debeziumTimestamps.getDebeziumReadSpeed();
+    }
+
+    public String[] getAllValues() {
+        return new String[]{
+                String.valueOf(getDatabaseTransactionTime()),
+                String.valueOf(getDebeziumStartTime()),
+                String.valueOf(getKafkaReceiveTime()),
+                String.valueOf(getDebeziumReadSpeed()),
+                String.valueOf(getDebeziumProcessSpeed()),
+        };
     }
 
     private String getDateFromMs(long ms) {
