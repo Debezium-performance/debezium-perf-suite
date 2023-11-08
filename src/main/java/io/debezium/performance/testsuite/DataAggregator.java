@@ -5,7 +5,6 @@ import io.debezium.performance.testsuite.model.TimeResults;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,11 +16,16 @@ public class DataAggregator {
 
     List<TimeResults> allResults;
 
-    public DataAggregator() {
+    int messageCount;
+    int messageSize;
+
+    public DataAggregator(int messageCount, int messageSize) {
         transactionsPerSecond = new HashMap<>();
         readsPerSecond = new HashMap<>();
         sendsPerSecond = new HashMap<>();
         allResults = new ArrayList<>();
+        this.messageCount = messageCount;
+        this.messageSize = messageSize;
     }
 
     public void addResult(TimeResults result) {
@@ -52,15 +56,19 @@ public class DataAggregator {
         return list;
     }
 
+    public String[] getCountAndSize() {
+        return new String[]{String.valueOf(messageCount), String.valueOf(messageSize)};
+    }
+
     private Long roundToSeconds(Long time) {
         return Instant.ofEpochMilli(time).truncatedTo(ChronoUnit.SECONDS).toEpochMilli();
     }
 
     private List<String[]> getAsListOfStringArrays(String[] headers, Map<Long, Integer> map){
         List<String[]> list = new ArrayList<>();
+        list.add(new String[]{"Message count:", String.valueOf(messageCount), "Message size (bytes):", String.valueOf(messageSize)});
         list.add(headers);
         map.forEach((second, count) -> list.add(new String[]{second.toString(), count.toString()}));
         return list;
     }
-
 }

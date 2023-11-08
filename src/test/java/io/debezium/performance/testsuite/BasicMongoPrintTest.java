@@ -10,11 +10,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 import static io.debezium.performance.testsuite.ConfigProperties.KAFKA_TEST_TOPIC;
@@ -42,7 +37,7 @@ public class BasicMongoPrintTest {
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = kafkaController.getRecords(KAFKA_TEST_TOPIC, count);
         printResults(records);
-        printResultsCsv(records, 1);
+        printResultsCsv(records, 1, count, size);
     }
 
     @Test
@@ -54,7 +49,7 @@ public class BasicMongoPrintTest {
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
         printResults(records);
-        printResultsCsv(records, 2);
+        printResultsCsv(records, 2, count, size);
     }
 
     @Test
@@ -65,7 +60,7 @@ public class BasicMongoPrintTest {
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
-        printResultsCsv(records, 3);
+        printResultsCsv(records, 3, count, size);
     }
 
     @Test
@@ -76,7 +71,7 @@ public class BasicMongoPrintTest {
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
-        printResultsCsv(records,4);
+        printResultsCsv(records,4, count, size);
     }
 
     @Test
@@ -87,7 +82,7 @@ public class BasicMongoPrintTest {
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
-        printResultsCsv(records, 5);
+        printResultsCsv(records, 5, count, size);
     }
     private void printResults(List<ConsumerRecord<String, String>> records){
         int i = 1;
@@ -102,8 +97,8 @@ public class BasicMongoPrintTest {
         }
     }
 
-    private void printResultsCsv(List<ConsumerRecord<String, String>> records, int testNumber){
-        DataAggregator aggregator = new DataAggregator();
+    private void printResultsCsv(List<ConsumerRecord<String, String>> records, int testNumber, int messageCount, int messageSize){
+        DataAggregator aggregator = new DataAggregator(messageCount, messageSize);
         for (ConsumerRecord<String, String> record : records) {
             TimeResults results;
             try {
