@@ -17,7 +17,8 @@ public class CsvExporter {
             lines.stream()
                     .map(CsvExporter::convertToCSV)
                     .forEach(pw::println);
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
     }

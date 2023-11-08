@@ -1,9 +1,7 @@
 package io.debezium.performance.testsuite.model;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class TimeResults {
     private DebeziumTimestamps debeziumTimestamps;

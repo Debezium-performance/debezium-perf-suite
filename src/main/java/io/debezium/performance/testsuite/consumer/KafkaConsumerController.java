@@ -65,7 +65,7 @@ public class KafkaConsumerController {
         while (collection.size() < count) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.of(100, ChronoUnit.SECONDS));
             records.forEach(collection::add);
-            LOG.info("{}",collection.size());
+            LOG.info("{}", collection.size());
         }
         return collection;
     }
@@ -82,7 +82,8 @@ public class KafkaConsumerController {
             Thread.sleep(60000);
             if (result.all().isDone()) {
                 LOG.info("Deletion complete");
-            } else {
+            }
+            else {
                 LOG.info("Deletion NOT complete");
             }
             result.all().get(100, TimeUnit.SECONDS);
@@ -90,7 +91,8 @@ public class KafkaConsumerController {
             client.createTopics(Collections.singleton(newTopic)).all().get(100, TimeUnit.SECONDS);
             LOG.info("Successfully recreated topic");
             consumer = getNewDefaultConsumer();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -134,7 +136,7 @@ public class KafkaConsumerController {
     }
 
     private Config getTopicConfig(AdminClient client, String topic) throws ExecutionException, InterruptedException {
-        Collection<ConfigResource> cr = Collections.singleton(new ConfigResource(ConfigResource.Type.TOPIC,topic));
+        Collection<ConfigResource> cr = Collections.singleton(new ConfigResource(ConfigResource.Type.TOPIC, topic));
         DescribeConfigsResult ConfigsResult = client.describeConfigs(cr);
         return (Config) ConfigsResult.all().get().values().toArray()[0];
     }

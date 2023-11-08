@@ -51,7 +51,7 @@ public class DataAggregator {
 
     public List<String[]> getAllResults() {
         List<String[]> list = new ArrayList<>();
-        list.add(new String[]{"Transaction timestamp", "Debezium read timestamp", "Kafka receive timestamp", "Debezium read speed","Debezium process speed "});
+        list.add(new String[]{"Transaction timestamp", "Debezium read timestamp", "Kafka receive timestamp", "Debezium read speed", "Debezium process speed "});
         allResults.forEach(result -> list.add(result.getAllValues()));
         return list;
     }
@@ -64,7 +64,7 @@ public class DataAggregator {
         return Instant.ofEpochMilli(time).truncatedTo(ChronoUnit.SECONDS).toEpochMilli();
     }
 
-    private List<String[]> getAsListOfStringArrays(String[] headers, Map<Long, Integer> map){
+    private List<String[]> getAsListOfStringArrays(String[] headers, Map<Long, Integer> map) {
         List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Message count:", String.valueOf(messageCount), "Message size (bytes):", String.valueOf(messageSize)});
         list.add(headers);
