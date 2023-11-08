@@ -119,29 +119,6 @@
           <version>${compiler-plugin.version}</version>
         </plugin>
         <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${surefire-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>${surefire-plugin.version}</version>
-          <configuration>
-            <systemPropertyVariables>
-              <test.dmt.url>${dmt.url}</test.dmt.url>
-              <test.kafka.bootstrap.servers>${kafka.bootstrap.servers}</test.kafka.bootstrap.servers>
-              <test.kafka.topic>${kafka.topic}</test.kafka.topic>>
-            </systemPropertyVariables>
-          </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>integration-test</goal>
-                <goal>verify</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
           <artifactId>maven-jar-plugin</artifactId>
           <version>3.0.2</version>
         </plugin>
@@ -162,6 +139,14 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${surefire-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>${surefire-plugin.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -180,6 +165,30 @@
               <configLocation>checkstyle.xml</configLocation>
               <consoleOutput>true</consoleOutput>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>-Xmx4G</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <test.dmt.url>${dmt.url}</test.dmt.url>
+            <test.kafka.bootstrap.servers>${kafka.bootstrap.servers}</test.kafka.bootstrap.servers>
+            <test.kafka.topic>${kafka.topic}</test.kafka.topic>>
+          </systemPropertyVariables>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
