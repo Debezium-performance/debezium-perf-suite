@@ -56,6 +56,16 @@ public class TimeResults {
         return debeziumTimestamps.getDebeziumReadSpeed();
     }
 
+    public String[] getAllValues() {
+        return new String[]{
+                String.valueOf(getDatabaseTransactionTime()),
+                String.valueOf(getDebeziumStartTime()),
+                String.valueOf(getKafkaReceiveTime()),
+                String.valueOf(getDebeziumReadSpeed()),
+                String.valueOf(getDebeziumProcessSpeed()),
+        };
+    }
+
     private String getDateFromMs(long ms) {
         Date time = new Date(ms);
         SimpleDateFormat formatter = new SimpleDateFormat("u-M-d hh:mm:ss.SSS");

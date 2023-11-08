@@ -62,7 +62,7 @@ public class BareDmtController implements DmtController {
         }
         LOG.info(DMT_URL + "/" + name);
         HttpUrl.Builder httpBuilder = Objects.requireNonNull(HttpUrl.parse("http://" + DMT_URL + "/Main/" + name)).newBuilder();
-        for(Map.Entry<String, String> param : queryParameters.entrySet()) {
+        for (Map.Entry<String, String> param : queryParameters.entrySet()) {
             httpBuilder.addQueryParameter(param.getKey(), param.getValue());
         }
         @SuppressWarnings("KotlinInternalInJava") Request request = new Request.Builder()
@@ -83,7 +83,8 @@ public class BareDmtController implements DmtController {
                 return new LoadResult(-1, -1, -1);
             }
             return new ObjectMapper().readValue(response.body().string(), LoadResult.class);
-        } catch (IOException ex) {
+        }
+        catch (IOException ex) {
             LOG.error(String.format("DMT endpoint %s could not send request", request.url()));
             throw new DmtException(String.format("DMT endpoint %s could not send request", request.url()), ex.getCause());
         }
