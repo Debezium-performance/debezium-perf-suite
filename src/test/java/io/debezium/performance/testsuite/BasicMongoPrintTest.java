@@ -36,7 +36,7 @@ public class BasicMongoPrintTest {
         KafkaConsumerController kafkaController = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = kafkaController.getRecords(KAFKA_TEST_TOPIC, count);
-        printResults(records);
+//        printResults(records);
         printResultsCsv(records, 1, count, size);
     }
 
@@ -48,7 +48,7 @@ public class BasicMongoPrintTest {
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
-        printResults(records);
+//        printResults(records);
         printResultsCsv(records, 2, count, size);
     }
 

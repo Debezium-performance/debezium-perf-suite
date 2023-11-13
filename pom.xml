@@ -171,7 +171,7 @@
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>-Xmx4G</argLine>
+          <argLine>-Xmx16G</argLine>
         </configuration>
       </plugin>
       <plugin>
