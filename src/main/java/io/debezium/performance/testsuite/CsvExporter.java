@@ -1,16 +1,22 @@
 package io.debezium.performance.testsuite;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class CsvExporter {
 
     public static void exportToCSVFiles(DataAggregator aggregator, int testNumber) {
-        writeToFile(aggregator.getTransactionsPerSecond(), String.format("transactions-per-second%s.csv", testNumber));
-        writeToFile(aggregator.getReadsPerSecond(), String.format("reads-per-second%s.csv", testNumber));
-        writeToFile(aggregator.getSendsPerSecond(), String.format("sends-per-second%s.csv", testNumber));
-        writeToFile(aggregator.getAllResults(), String.format("total-results%s.csv", testNumber));
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-HHmm");
+        String currentDateTime = LocalDateTime.now().format(format);
+        new File(currentDateTime).mkdirs();
+        writeToFile(aggregator.getTransactionsPerSecond(), String.format("%s/transactions-per-second%s.csv", currentDateTime, testNumber));
+        writeToFile(aggregator.getReadsPerSecond(), String.format("%s/reads-per-second%s.csv", currentDateTime, testNumber));
+        writeToFile(aggregator.getSendsPerSecond(), String.format("%s/sends-per-second%s.csv", currentDateTime, testNumber));
+        writeToFile(aggregator.getAllResults(), String.format("%s/total-results%s.csv", currentDateTime, testNumber));
     }
     public static void writeToFile(List<String[]> lines, String fileName) {
         try(PrintWriter pw = new PrintWriter(fileName)) {
