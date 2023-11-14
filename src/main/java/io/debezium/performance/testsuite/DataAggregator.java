@@ -2,6 +2,7 @@ package io.debezium.performance.testsuite;
 
 import io.debezium.performance.testsuite.model.TimeResults;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class DataAggregator {
 
     public List<String[]> getAllResults() {
         List<String[]> list = new ArrayList<>();
+        list.add(new String[]{"Message count:", String.valueOf(messageCount), "Message size (bytes):", String.valueOf(messageSize)});
         list.add(new String[]{"Transaction timestamp", "Debezium read timestamp", "Kafka receive timestamp", "Debezium read speed", "Debezium process speed "});
         allResults.forEach(result -> list.add(result.getAllValues()));
         return list;
@@ -68,7 +70,7 @@ public class DataAggregator {
         List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Message count:", String.valueOf(messageCount), "Message size (bytes):", String.valueOf(messageSize)});
         list.add(headers);
-        map.forEach((second, count) -> list.add(new String[]{second.toString(), count.toString()}));
+        map.forEach((second, count) -> list.add(new String[]{new Timestamp(second).toString(), count.toString()}));
         return list;
     }
 }
