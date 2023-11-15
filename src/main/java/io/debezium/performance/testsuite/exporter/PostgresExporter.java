@@ -31,11 +31,11 @@ public class PostgresExporter implements Exporter {
         this.testNumber = String.valueOf(testNumber);
         try (Connection con = DriverManager.getConnection(RESULT_DATABASE);
              PreparedStatement ps = con.prepareStatement(createTableSql())) {
-            ps.executeQuery();
+            ps.executeUpdate();
             LOG.info("Created table");
             for (int i = 0; i < dataAggregator.getAllResultsAsStrings().size(); i++) {
                 PreparedStatement insert = con.prepareStatement(insertRowSql(dataAggregator.getAllResults().get(i)));
-                insert.executeQuery();
+                insert.executeUpdate();
                 insert.close();
             }
         }
