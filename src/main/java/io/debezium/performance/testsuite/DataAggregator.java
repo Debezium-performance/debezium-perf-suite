@@ -54,7 +54,7 @@ public class DataAggregator {
         List<String[]> list = new ArrayList<>();
         list.add(new String[]{"Message count:", String.valueOf(messageCount), "Message size (bytes):", String.valueOf(messageSize)});
         list.add(new String[]{"Transaction timestamp", "Debezium read timestamp", "Kafka receive timestamp", "Debezium read speed", "Debezium process speed "});
-        allResults.forEach(result -> list.add(result.getAllValues()));
+        allResults.forEach(result -> list.add(result.getAllValuesWithSqlTimestamp()));
         return list;
     }
 

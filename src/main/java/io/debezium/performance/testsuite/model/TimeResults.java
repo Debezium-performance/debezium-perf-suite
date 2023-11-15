@@ -1,5 +1,6 @@
 package io.debezium.performance.testsuite.model;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -61,6 +62,16 @@ public class TimeResults {
                 String.valueOf(getDatabaseTransactionTime()),
                 String.valueOf(getDebeziumStartTime()),
                 String.valueOf(getKafkaReceiveTime()),
+                String.valueOf(getDebeziumReadSpeed()),
+                String.valueOf(getDebeziumProcessSpeed()),
+        };
+    }
+
+    public String[] getAllValuesWithSqlTimestamp() {
+        return new String[]{
+                String.valueOf(new Timestamp(getDatabaseTransactionTime()).toString()),
+                String.valueOf(new Timestamp(getDebeziumStartTime()).toString()),
+                String.valueOf(new Timestamp(getKafkaReceiveTime()).toString()),
                 String.valueOf(getDebeziumReadSpeed()),
                 String.valueOf(getDebeziumProcessSpeed()),
         };
