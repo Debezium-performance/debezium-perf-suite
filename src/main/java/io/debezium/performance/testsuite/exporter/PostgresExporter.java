@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
@@ -33,11 +34,12 @@ public class PostgresExporter implements Exporter {
              PreparedStatement ps = con.prepareStatement(createTableSql())) {
             ps.executeUpdate();
             LOG.info("Created table");
-            for (int i = 0; i < dataAggregator.getAllResultsAsStrings().size(); i++) {
-                PreparedStatement insert = con.prepareStatement(insertRowSql(dataAggregator.getAllResults().get(i)));
-                insert.executeUpdate();
-                insert.close();
+            Statement stmt = con.createStatement();
+            for (int i = 0; i < dataAggregator.getAllResults().size(); i++) {
+                stmt.addBatch(insertRowSql(dataAggregator.getAllResults().get(i)));
             }
+            stmt.executeBatch();
+            stmt.close();
         }
         catch (SQLException e) {
             e.printStackTrace();
