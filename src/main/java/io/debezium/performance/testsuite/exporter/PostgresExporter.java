@@ -57,7 +57,7 @@ public class PostgresExporter implements Exporter {
     }
 
     private String insertRowSql(TimeResults results) {
-        String sql ="INSERT INTO \"public." + getTableName() + "\" (\"Debezium read speed\", \"Debezium process speed\", \"Transaction timestamp\"," +
+        String sql ="INSERT INTO \"" + getTableName() + "\" (\"Debezium read speed\", \"Debezium process speed\", \"Transaction timestamp\"," +
                 "                                   \"Debezium read timestamp\", \"Kafka receive timestamp\")" +
                 "VALUES ("+ results.getDebeziumReadSpeed() +", "+ results.getDebeziumProcessSpeed() +", " +
                 "'"+ new Timestamp(results.getDatabaseTransactionTime()) +"', '" + new Timestamp(results.getDebeziumStartTime()) + "'," +
