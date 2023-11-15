@@ -1,7 +1,10 @@
 package io.debezium.performance.testsuite.exporter;
 
 import io.debezium.performance.testsuite.DataAggregator;
+import io.debezium.performance.testsuite.consumer.KafkaConsumerController;
 import io.debezium.performance.testsuite.model.TimeResults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,6 +18,8 @@ import java.util.Date;
 import static io.debezium.performance.testsuite.ConfigProperties.RESULT_DATABASE;
 
 public class PostgresExporter implements Exporter {
+
+    private final Logger LOG = LoggerFactory.getLogger(PostgresExporter.class);
     String time;
 
     String testNumber;
@@ -27,6 +32,7 @@ public class PostgresExporter implements Exporter {
         try (Connection con = DriverManager.getConnection(RESULT_DATABASE);
              PreparedStatement ps = con.prepareStatement(createTableSql())) {
             ps.executeQuery();
+            LOG.info("Created table");
             for (int i = 0; i < dataAggregator.getAllResultsAsStrings().size(); i++) {
                 PreparedStatement insert = con.prepareStatement(insertRowSql(dataAggregator.getAllResults().get(i)));
                 insert.executeQuery();
@@ -40,7 +46,7 @@ public class PostgresExporter implements Exporter {
 
     private String createTableSql() {
         String sql = "create table \"" + getTableName() +
-                "(" +
+                "\"(" +
                 "    \"Debezium read speed\"     integer," +
                 "    \"Debezium process speed\"  integer," +
                 "    \"Transaction timestamp\"   timestamp," +
@@ -51,7 +57,7 @@ public class PostgresExporter implements Exporter {
     }
 
     private String insertRowSql(TimeResults results) {
-        String sql ="INSERT INTO public." + getTableName() + " (\"Debezium read speed\", \"Debezium process speed\", \"Transaction timestamp\"," +
+        String sql ="INSERT INTO \"public." + getTableName() + "\" (\"Debezium read speed\", \"Debezium process speed\", \"Transaction timestamp\"," +
                 "                                   \"Debezium read timestamp\", \"Kafka receive timestamp\")" +
                 "VALUES ("+ results.getDebeziumReadSpeed() +", "+ results.getDebeziumProcessSpeed() +", " +
                 "'"+ new Timestamp(results.getDatabaseTransactionTime()) +"', '" + new Timestamp(results.getDebeziumStartTime()) + "'," +
