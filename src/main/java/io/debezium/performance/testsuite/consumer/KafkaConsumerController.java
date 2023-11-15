@@ -62,10 +62,15 @@ public class KafkaConsumerController {
     public List<ConsumerRecord<String, String>> getRecords(String topic, int count) {
         List<ConsumerRecord<String, String>> collection = new ArrayList<>();
         consumer.subscribe(Collections.singleton(topic));
+        int i = 0;
         while (collection.size() < count) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.of(100, ChronoUnit.SECONDS));
             records.forEach(collection::add);
-            LOG.info("{}", collection.size());
+
+            if (i % 20 == 0) {
+                LOG.info("Read {} records so far", collection.size());
+            }
+            i++;
         }
         return collection;
     }

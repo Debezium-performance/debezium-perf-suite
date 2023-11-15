@@ -26,6 +26,7 @@
     <dmt.url></dmt.url>
     <kafka.bootstrap.servers></kafka.bootstrap.servers>
     <kafka.topic></kafka.topic>
+    <result.database></result.database>
   </properties>
 
   <reporting>
@@ -180,7 +181,8 @@
           <systemPropertyVariables>
             <test.dmt.url>${dmt.url}</test.dmt.url>
             <test.kafka.bootstrap.servers>${kafka.bootstrap.servers}</test.kafka.bootstrap.servers>
-            <test.kafka.topic>${kafka.topic}</test.kafka.topic>>
+            <test.kafka.topic>${kafka.topic}</test.kafka.topic>
+            <test.result.database>${result.database}</test.result.database>
           </systemPropertyVariables>
         </configuration>
         <executions>

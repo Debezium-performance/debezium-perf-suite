@@ -3,6 +3,7 @@ package io.debezium.performance.testsuite;
 import io.debezium.performance.testsuite.consumer.KafkaConsumerController;
 import io.debezium.performance.testsuite.deserializer.KafkaRecordParser;
 import io.debezium.performance.testsuite.dmt.BareDmtController;
+import io.debezium.performance.testsuite.exporter.PostgresExporter;
 import io.debezium.performance.testsuite.model.TimeResults;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.BeforeClass;
@@ -20,6 +21,7 @@ public class BasicMongoPrintTest {
 
     @BeforeClass
     public static void clearTopic() {
+
         KafkaConsumerController.getInstance().deleteAndRecreateTopic(KAFKA_TEST_TOPIC);
         try {
             Thread.sleep(60000);
@@ -30,59 +32,59 @@ public class BasicMongoPrintTest {
 
     @Test
     public void test1() {
-        int count = 100;
-        int size = 100000;
+        int count = 10000;
+        int size = 25000;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController kafkaController = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = kafkaController.getRecords(KAFKA_TEST_TOPIC, count);
 //        printResults(records);
-        printResultsCsv(records, 1, count, size);
+        exportResults(records, 1, count, size);
     }
 
     @Test
     public void test2() {
-        int count = 1000;
-        int size = 10000;
+        int count = 100000;
+        int size = 2500;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
 //        printResults(records);
-        printResultsCsv(records, 2, count, size);
+        exportResults(records, 2, count, size);
     }
 
     @Test
     public void test3() {
-        int count = 10000;
-        int size = 1000;
+        int count = 1000000;
+        int size = 250;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
-        printResultsCsv(records, 3, count, size);
+        exportResults(records, 3, count, size);
     }
 
     @Test
     public void test4() {
-        int count = 100000;
-        int size = 100;
+        int count = 2000000;
+        int size = 125;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
-        printResultsCsv(records,4, count, size);
+        exportResults(records,4, count, size);
     }
 
     @Test
     public void test5() {
-        int count = 1000000;
-        int size = 10;
+        int count = 10000000;
+        int size = 25;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
         LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
-        printResultsCsv(records, 5, count, size);
+        exportResults(records, 5, count, size);
     }
     private void printResults(List<ConsumerRecord<String, String>> records){
         int i = 1;
@@ -97,7 +99,7 @@ public class BasicMongoPrintTest {
         }
     }
 
-    private void printResultsCsv(List<ConsumerRecord<String, String>> records, int testNumber, int messageCount, int messageSize){
+    private void exportResults(List<ConsumerRecord<String, String>> records, int testNumber, int messageCount, int messageSize){
         DataAggregator aggregator = new DataAggregator(messageCount, messageSize);
         for (ConsumerRecord<String, String> record : records) {
             TimeResults results;
@@ -108,7 +110,7 @@ public class BasicMongoPrintTest {
                 throw new RuntimeException(ex);
             }
         }
-        CsvExporter.exportToCSVFiles(aggregator, testNumber);
+        new PostgresExporter().export(aggregator, testNumber);
     }
 
 }
