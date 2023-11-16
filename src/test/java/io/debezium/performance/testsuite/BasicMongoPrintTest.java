@@ -90,19 +90,6 @@ public class BasicMongoPrintTest {
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
         exportResults(records, 5, count, size);
     }
-
-    @Test
-    public void timezoneTest() {
-        Instant time = Instant.now();
-        LOG.info("Instant now : " + time.toString());
-        LOG.info("Instant now to epoch milli : " + time.toEpochMilli());
-        Date date = new Date(time.toEpochMilli());
-        LOG.info("Date  : " + date.toString());
-        SimpleDateFormat formatter = new SimpleDateFormat("u_M_d_hh_mm");
-        LOG.info("Formatted date : " + formatter.format(date));
-        Timestamp timestamp = new Timestamp(time.toEpochMilli());
-        LOG.info("Sql timestamp : " + timestamp);
-    }
     private void printResults(List<ConsumerRecord<String, String>> records){
         int i = 1;
         for (ConsumerRecord<String, String> record : records) {

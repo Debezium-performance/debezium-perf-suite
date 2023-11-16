@@ -27,7 +27,7 @@ public class PostgresExporter implements Exporter {
     @Override
     public void export(DataAggregator dataAggregator, int testNumber) {
         Date time = new Date(Instant.now().toEpochMilli());
-        SimpleDateFormat formatter = new SimpleDateFormat("u_M_d_hh_mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yy_M_d_hh_mm");
         this.time = formatter.format(time);
         this.testNumber = String.valueOf(testNumber);
         try (Connection con = DriverManager.getConnection(RESULT_DATABASE);
