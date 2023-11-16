@@ -33,10 +33,13 @@ public class PostgresExporter implements Exporter {
         try (Connection con = DriverManager.getConnection(RESULT_DATABASE);
              PreparedStatement ps = con.prepareStatement(createTableSql())) {
             ps.executeUpdate();
-            LOG.info("Created table");
+            LOG.info("Created table " + getTableName());
             Statement stmt = con.createStatement();
             for (int i = 0; i < dataAggregator.getAllResults().size(); i++) {
                 stmt.addBatch(insertRowSql(dataAggregator.getAllResults().get(i)));
+                if (i % 100000 == 0) {
+                    stmt.executeBatch();
+                }
             }
             stmt.executeBatch();
             stmt.close();
