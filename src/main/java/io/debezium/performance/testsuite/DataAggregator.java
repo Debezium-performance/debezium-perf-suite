@@ -79,6 +79,10 @@ public class DataAggregator {
         return allResults;
     }
 
+    public Map<TimeResults, Integer> getAllResultsWithCount() {
+        return allResultsWithCount;
+    }
+
     public String[] getCountAndSize() {
         return new String[]{String.valueOf(messageCount), String.valueOf(messageSize)};
     }

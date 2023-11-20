@@ -8,6 +8,7 @@ import io.debezium.performance.testsuite.exporter.PostgresExporter;
 import io.debezium.performance.testsuite.model.TimeResults;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,7 +90,8 @@ public class BasicMongoPrintTest {
     }
 
     @Test
-    public void csv_small_test() {
+    @Ignore
+    public void csvSmallTest() {
         int count = 100000;
         int size = 25;
         BareDmtController dmt = BareDmtController.getInstance();
@@ -98,6 +100,38 @@ public class BasicMongoPrintTest {
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
         exportResultsCsv(records, 6, count, size);
     }
+
+    @Test
+    @Ignore
+    public void postgresSmallTest() {
+        int count = 100000;
+        int size = 25;
+        BareDmtController dmt = BareDmtController.getInstance();
+        KafkaConsumerController consumer = KafkaConsumerController.getInstance();
+        LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
+        List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
+        exportResults(records, 7, count, size);
+    }
+
+    @Test
+    @Ignore
+    public void test5WithoutConsume() {
+        int count = 10000000;
+        int size = 25;
+        BareDmtController dmt = BareDmtController.getInstance();
+        LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
+    }
+
+    @Test
+    @Ignore
+    public void test5OnlyConsume() {
+        int count = 10000000;
+        int size = 25;
+        KafkaConsumerController consumer = KafkaConsumerController.getInstance();
+        List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
+        exportResults(records, 5, count, size);
+    }
+
 
     private void printResults(List<ConsumerRecord<String, String>> records){
         int i = 1;

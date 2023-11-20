@@ -35,11 +35,13 @@ public class PostgresExporter implements Exporter {
             ps.executeUpdate();
             LOG.info("Created table " + getTableName());
             Statement stmt = con.createStatement();
-            for (int i = 0; i < dataAggregator.getAllResults().size(); i++) {
-                stmt.addBatch(insertRowSql(dataAggregator.getAllResults().get(i)));
-                if (i % 100000 == 0) {
+            int batchCounter = 0;
+            for (var entry: dataAggregator.getAllResultsWithCount().entrySet()) {
+                stmt.addBatch(insertRowSql(entry.getKey(), entry.getValue()));
+                if (batchCounter % 100000 == 0) {
                     stmt.executeBatch();
                 }
+                batchCounter++;
             }
             stmt.executeBatch();
             stmt.close();
@@ -57,16 +59,17 @@ public class PostgresExporter implements Exporter {
                 "    \"Transaction timestamp\"   timestamp," +
                 "    \"Debezium read timestamp\" timestamp," +
                 "    \"Kafka receive timestamp\" timestamp" +
+                "    \"Message count\" integer" +
                 ");";
         return sql;
     }
 
-    private String insertRowSql(TimeResults results) {
+    private String insertRowSql(TimeResults results, Integer count) {
         String sql ="INSERT INTO \"" + getTableName() + "\" (\"Debezium read speed\", \"Debezium process speed\", \"Transaction timestamp\"," +
-                "                                   \"Debezium read timestamp\", \"Kafka receive timestamp\")" +
+                "                                   \"Debezium read timestamp\", \"Kafka receive timestamp\", \"Message count\")" +
                 "VALUES ("+ results.getDebeziumReadSpeed() +", "+ results.getDebeziumProcessSpeed() +", " +
                 "'"+ new Timestamp(results.getDatabaseTransactionTime()) +"', '" + new Timestamp(results.getDebeziumStartTime()) + "'," +
-                "'" + new Timestamp(results.getKafkaReceiveTime())+ "')";
+                "'" + new Timestamp(results.getKafkaReceiveTime()) + count +  "')";
         return sql;
     }
 
