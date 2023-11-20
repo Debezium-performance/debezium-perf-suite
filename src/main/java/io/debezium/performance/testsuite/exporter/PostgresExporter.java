@@ -36,15 +36,15 @@ public class PostgresExporter implements Exporter {
             LOG.info("Created table " + getTableName());
             Statement stmt = con.createStatement();
             int batchCounter = 0;
-            int testCounter = 0;
-            for (var entry: dataAggregator.getAllResultsWithCount().entrySet()) {
-                LOG.info(entry.getKey().toString());
-                LOG.info(entry.getValue().toString());
-                if (testCounter == 10) {
-                    break;
-                }
-                testCounter++;
-            }
+//            int testCounter = 0;
+//            for (var entry: dataAggregator.getAllResultsWithCount().entrySet()) {
+//                LOG.info(entry.getKey().toString());
+//                LOG.info(entry.getValue().toString());
+//                if (testCounter == 10) {
+//                    break;
+//                }
+//                testCounter++;
+//            }
             for (var entry: dataAggregator.getAllResultsWithCount().entrySet()) {
                 stmt.addBatch(insertRowSql(entry.getKey(), entry.getValue()));
                 if (batchCounter % 100000 == 0) {
@@ -78,7 +78,7 @@ public class PostgresExporter implements Exporter {
                 "                                   \"Debezium read timestamp\", \"Kafka receive timestamp\", \"Message count\")" +
                 "VALUES ("+ results.getDebeziumReadSpeed() +", "+ results.getDebeziumProcessSpeed() +", " +
                 "'"+ new Timestamp(results.getDatabaseTransactionTime()) +"', '" + new Timestamp(results.getDebeziumStartTime()) + "'," +
-                "'" + new Timestamp(results.getKafkaReceiveTime()) + count.toString() +  "')";
+                "'" + new Timestamp(results.getKafkaReceiveTime()) + "', '" + count.toString() +  "')";
         return sql;
     }
 
