@@ -18,6 +18,7 @@ public class CsvExporter implements Exporter {
         writeToFile(aggregator.getReadsPerSecond(), String.format("%s/reads-per-second%s.csv", currentDateTime, testNumber));
         writeToFile(aggregator.getSendsPerSecond(), String.format("%s/sends-per-second%s.csv", currentDateTime, testNumber));
         writeToFile(aggregator.getAllResultsAsStrings(), String.format("%s/total-results%s.csv", currentDateTime, testNumber));
+        writeToFileWithList(aggregator.getAllResultsWithCounts(), String.format("%s/total-results-counts%s.csv", currentDateTime, testNumber));
     }
     public void writeToFile(List<String[]> lines, String fileName) {
         try(PrintWriter pw = new PrintWriter(fileName)) {
@@ -30,7 +31,22 @@ public class CsvExporter implements Exporter {
         }
     }
 
+    public void writeToFileWithList(List<List<String>> lines, String fileName) {
+        try(PrintWriter pw = new PrintWriter(fileName)) {
+            lines.stream()
+                    .map(this::convertListToCSV)
+                    .forEach(pw::println);
+        }
+        catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private String convertToCSV(String[] data) {
+        return String.join(",", data);
+    }
+
+    private String convertListToCSV(List<String> data) {
         return String.join(",", data);
     }
 

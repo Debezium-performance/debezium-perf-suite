@@ -3,6 +3,8 @@ package io.debezium.performance.testsuite.model;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.debezium.performance.testsuite.deserializer.DebeziumTimestampDeserializer;
 
+import java.util.Objects;
+
 @JsonDeserialize(using = DebeziumTimestampDeserializer.class)
 public class DebeziumTimestamps {
     private long databaseTransactionTime;
@@ -39,5 +41,18 @@ public class DebeziumTimestamps {
             return -1;
         }
         return debeziumReadTime - databaseTransactionTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DebeziumTimestamps that = (DebeziumTimestamps) o;
+        return databaseTransactionTime == that.databaseTransactionTime && debeziumReadTime == that.debeziumReadTime;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(databaseTransactionTime, debeziumReadTime);
     }
 }

@@ -3,6 +3,7 @@ package io.debezium.performance.testsuite;
 import io.debezium.performance.testsuite.consumer.KafkaConsumerController;
 import io.debezium.performance.testsuite.deserializer.KafkaRecordParser;
 import io.debezium.performance.testsuite.dmt.BareDmtController;
+import io.debezium.performance.testsuite.exporter.CsvExporter;
 import io.debezium.performance.testsuite.exporter.PostgresExporter;
 import io.debezium.performance.testsuite.model.TimeResults;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -11,10 +12,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 import static io.debezium.performance.testsuite.ConfigProperties.KAFKA_TEST_TOPIC;
@@ -26,12 +23,12 @@ public class BasicMongoPrintTest {
     @BeforeClass
     public static void clearTopic() {
 
-//        KafkaConsumerController.getInstance().deleteAndRecreateTopic(KAFKA_TEST_TOPIC);
-//        try {
-//            Thread.sleep(60000);
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
+        KafkaConsumerController.getInstance().deleteAndRecreateTopic(KAFKA_TEST_TOPIC);
+        try {
+            Thread.sleep(60000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
@@ -90,6 +87,18 @@ public class BasicMongoPrintTest {
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
         exportResults(records, 5, count, size);
     }
+
+    @Test
+    public void csv_small_test() {
+        int count = 100000;
+        int size = 25;
+        BareDmtController dmt = BareDmtController.getInstance();
+        KafkaConsumerController consumer = KafkaConsumerController.getInstance();
+        LOG.info(dmt.generateMongoBulkLoad(count, 1000000, size).toString());
+        List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
+        exportResultsCsv(records, 6, count, size);
+    }
+
     private void printResults(List<ConsumerRecord<String, String>> records){
         int i = 1;
         for (ConsumerRecord<String, String> record : records) {
@@ -115,6 +124,20 @@ public class BasicMongoPrintTest {
             }
         }
         new PostgresExporter().export(aggregator, testNumber);
+    }
+
+    private void exportResultsCsv(List<ConsumerRecord<String, String>> records, int testNumber, int messageCount, int messageSize){
+        DataAggregator aggregator = new DataAggregator(messageCount, messageSize);
+        for (ConsumerRecord<String, String> record : records) {
+            TimeResults results;
+            try {
+                results = KafkaRecordParser.parseTimeResults(record);
+                aggregator.addResult(results);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        new CsvExporter().export(aggregator, testNumber);
     }
 
 }
