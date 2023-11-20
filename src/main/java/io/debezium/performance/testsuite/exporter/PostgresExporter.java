@@ -58,7 +58,7 @@ public class PostgresExporter implements Exporter {
                 "    \"Debezium process speed\"  integer," +
                 "    \"Transaction timestamp\"   timestamp," +
                 "    \"Debezium read timestamp\" timestamp," +
-                "    \"Kafka receive timestamp\" timestamp" +
+                "    \"Kafka receive timestamp\" timestamp," +
                 "    \"Message count\" integer" +
                 ");";
         return sql;
