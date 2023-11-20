@@ -69,7 +69,7 @@ public class PostgresExporter implements Exporter {
                 "                                   \"Debezium read timestamp\", \"Kafka receive timestamp\", \"Message count\")" +
                 "VALUES ("+ results.getDebeziumReadSpeed() +", "+ results.getDebeziumProcessSpeed() +", " +
                 "'"+ new Timestamp(results.getDatabaseTransactionTime()) +"', '" + new Timestamp(results.getDebeziumStartTime()) + "'," +
-                "'" + new Timestamp(results.getKafkaReceiveTime()) + count +  "')";
+                "'" + new Timestamp(results.getKafkaReceiveTime()) + count.toString() +  "')";
         return sql;
     }
 
