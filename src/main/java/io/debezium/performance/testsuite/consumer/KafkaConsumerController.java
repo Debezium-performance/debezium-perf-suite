@@ -114,7 +114,7 @@ public class KafkaConsumerController {
         Properties consumerProps = new Properties();
         consumerProps.put(BOOTSTRAP_SERVERS_CONFIG, KAFKA_BOOTSTRAP_SERVERS);
         consumerProps.put(GROUP_ID_CONFIG, "2");
-        consumerProps.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
+        consumerProps.put(AUTO_OFFSET_RESET_CONFIG, "latest");
         consumerProps.put(ENABLE_AUTO_COMMIT_CONFIG, true);
         consumerProps.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerProps.put(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);

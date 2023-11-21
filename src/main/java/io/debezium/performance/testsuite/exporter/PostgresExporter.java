@@ -1,7 +1,6 @@
 package io.debezium.performance.testsuite.exporter;
 
 import io.debezium.performance.testsuite.DataAggregator;
-import io.debezium.performance.testsuite.consumer.KafkaConsumerController;
 import io.debezium.performance.testsuite.model.TimeResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,6 @@ public class PostgresExporter implements Exporter {
 
     private final Logger LOG = LoggerFactory.getLogger(PostgresExporter.class);
     String time;
-
     String testNumber;
     @Override
     public void export(DataAggregator dataAggregator, int testNumber) {
