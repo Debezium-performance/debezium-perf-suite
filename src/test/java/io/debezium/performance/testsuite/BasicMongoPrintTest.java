@@ -157,7 +157,7 @@ public class BasicMongoPrintTest {
                 throw new RuntimeException(ex);
             }
         }
-        new PostgresExporter().export(aggregator, testNumber);
+        new PostgresExporter(aggregator).export();
     }
 
     private void exportResultsCsv(List<ConsumerRecord<String, String>> records, int testNumber, int messageCount, int messageSize){
@@ -171,7 +171,7 @@ public class BasicMongoPrintTest {
                 throw new RuntimeException(ex);
             }
         }
-        new CsvExporter(aggregator).export(aggregator, testNumber);
+        new CsvExporter(aggregator).export();
     }
 
 }

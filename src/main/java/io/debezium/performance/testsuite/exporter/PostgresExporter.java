@@ -20,14 +20,21 @@ import static io.debezium.performance.testsuite.ConfigProperties.RESULT_DATABASE
 public class PostgresExporter implements Exporter {
 
     private final Logger LOG = LoggerFactory.getLogger(PostgresExporter.class);
-    String time;
-    String testNumber;
-    @Override
-    public void export(TestDataAggregator dataAggregator, int testNumber) {
+    String currentDateTime;
+    TestDataAggregator testDataAggregator;
+
+    public PostgresExporter(TestDataAggregator testDataAggregator) {
+        this.testDataAggregator = testDataAggregator;
         Date time = new Date(Instant.now().toEpochMilli());
         SimpleDateFormat formatter = new SimpleDateFormat("yy_M_d_hh_mm");
-        this.time = formatter.format(time);
-        this.testNumber = String.valueOf(testNumber);
+        this.currentDateTime = formatter.format(time);
+    }
+
+    @Override
+    public void export() {
+        Date time = new Date(Instant.now().toEpochMilli());
+        SimpleDateFormat formatter = new SimpleDateFormat("yy_M_d_hh_mm");
+        this.currentDateTime = formatter.format(time);
         try (Connection con = DriverManager.getConnection(RESULT_DATABASE);
              PreparedStatement ps = con.prepareStatement(createTableSql())) {
             ps.executeUpdate();
@@ -43,7 +50,7 @@ public class PostgresExporter implements Exporter {
 //                }
 //                testCounter++;
 //            }
-            for (var entry: dataAggregator.getAllResultsWithCount().entrySet()) {
+            for (var entry: testDataAggregator.getAllResultsWithCount().entrySet()) {
                 stmt.addBatch(insertRowSql(entry.getKey(), entry.getValue()));
                 if (batchCounter % 100000 == 0) {
                     stmt.executeBatch();
@@ -81,6 +88,6 @@ public class PostgresExporter implements Exporter {
     }
 
     private String getTableName() {
-        return this.time + "_" + testNumber +"_totalResults";
+        return this.currentDateTime + "_" + testDataAggregator.getTestNumber() +"_totalResults";
     }
 }

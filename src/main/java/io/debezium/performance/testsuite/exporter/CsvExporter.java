@@ -27,7 +27,7 @@ public class CsvExporter implements Exporter {
         this.currentDateTime = formatter.format(time);
     }
 
-    public void export(TestDataAggregator aggregator, int testNumber) {
+    public void export() {
         new File(currentDateTime).mkdirs();
         writeCsvToFile(getTransactionsPerSecondCsv(), generateFileName("transactions-per-second"));
         writeCsvToFile(getReadsPerSecondCsv(), generateFileName("reads-per-second"));
