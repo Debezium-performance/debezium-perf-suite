@@ -147,7 +147,7 @@ public class BasicMongoPrintTest {
     }
 
     private void exportResults(List<ConsumerRecord<String, String>> records, int testNumber, int messageCount, int messageSize){
-        DataAggregator aggregator = new DataAggregator(messageCount, messageSize, testNumber);
+        TestDataAggregator aggregator = new TestDataAggregator(messageCount, messageSize, testNumber);
         for (ConsumerRecord<String, String> record : records) {
             TimeResults results;
             try {
@@ -161,7 +161,7 @@ public class BasicMongoPrintTest {
     }
 
     private void exportResultsCsv(List<ConsumerRecord<String, String>> records, int testNumber, int messageCount, int messageSize){
-        DataAggregator aggregator = new DataAggregator(messageCount, messageSize, testNumber);
+        TestDataAggregator aggregator = new TestDataAggregator(messageCount, messageSize, testNumber);
         for (ConsumerRecord<String, String> record : records) {
             TimeResults results;
             try {

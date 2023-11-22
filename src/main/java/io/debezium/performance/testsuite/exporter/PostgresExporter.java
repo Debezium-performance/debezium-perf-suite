@@ -1,6 +1,6 @@
 package io.debezium.performance.testsuite.exporter;
 
-import io.debezium.performance.testsuite.DataAggregator;
+import io.debezium.performance.testsuite.TestDataAggregator;
 import io.debezium.performance.testsuite.model.TimeResults;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class PostgresExporter implements Exporter {
     String time;
     String testNumber;
     @Override
-    public void export(DataAggregator dataAggregator, int testNumber) {
+    public void export(TestDataAggregator dataAggregator, int testNumber) {
         Date time = new Date(Instant.now().toEpochMilli());
         SimpleDateFormat formatter = new SimpleDateFormat("yy_M_d_hh_mm");
         this.time = formatter.format(time);

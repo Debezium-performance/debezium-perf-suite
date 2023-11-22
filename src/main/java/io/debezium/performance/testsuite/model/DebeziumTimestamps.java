@@ -45,8 +45,12 @@ public class DebeziumTimestamps {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         DebeziumTimestamps that = (DebeziumTimestamps) o;
         return databaseTransactionTime == that.databaseTransactionTime && debeziumReadTime == that.debeziumReadTime;
     }

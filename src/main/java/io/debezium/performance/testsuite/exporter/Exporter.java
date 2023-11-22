@@ -1,8 +1,8 @@
 package io.debezium.performance.testsuite.exporter;
 
-import io.debezium.performance.testsuite.DataAggregator;
+import io.debezium.performance.testsuite.TestDataAggregator;
 
 public interface Exporter {
 
-    void export(DataAggregator dataAggregator, int testNumber);
+    void export(TestDataAggregator dataAggregator, int testNumber);
 }
