@@ -22,58 +22,61 @@ public class BasicSqlPrintTest {
     @Test
     public void test1() {
         int count = 10000;
-//        int size = 25000;
+        int size = 25000;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController kafkaController = KafkaConsumerController.getInstance();
-        LOG.info(dmt.generateSqlBatchLoad(count, 1000000).toString());
+        LOG.info(dmt.generateSqlBatchLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = kafkaController.getRecords(KAFKA_TEST_TOPIC, count);
 //        printResults(records);
-        exportResults(records, 1, count, 0);
+        exportResults(records, 1, count, size);
     }
 
     @Test
     public void test2() {
         int count = 100000;
-//        int size = 2500;
+        int size = 2500;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
-        LOG.info(dmt.generateSqlBatchLoad(count, 1000000).toString());
+        LOG.info(dmt.generateSqlBatchLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
 //        printResults(records);
-        exportResults(records, 2, count, 0);
+        exportResults(records, 2, count, size);
     }
 
     @Test
     public void test3() {
         int count = 1000000;
+        int size = 250;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
-        LOG.info(dmt.generateSqlBatchLoad(count, 1000000).toString());
+        LOG.info(dmt.generateSqlBatchLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
 //        printResults(records);
-        exportResults(records, 3, count, 0);
+        exportResults(records, 3, count, size);
     }
 
     @Test
     public void test4() {
         int count = 2000000;
+        int size = 125;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
-        LOG.info(dmt.generateSqlBatchLoad(count, 1000000).toString());
+        LOG.info(dmt.generateSqlBatchLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
 //        printResults(records);
-        exportResults(records, 4, count, 0);
+        exportResults(records, 4, count, size);
     }
 
     @Test
     public void test5() {
         int count = 10000000;
+        int size = 25;
         BareDmtController dmt = BareDmtController.getInstance();
         KafkaConsumerController consumer = KafkaConsumerController.getInstance();
-        LOG.info(dmt.generateSqlBatchLoad(count, 1000000).toString());
+        LOG.info(dmt.generateSqlBatchLoad(count, 1000000, size).toString());
         List<ConsumerRecord<String, String>> records = consumer.getRecords(KAFKA_TEST_TOPIC, count);
 //        printResults(records);
-        exportResults(records, 5, count, 0);
+        exportResults(records, 5, count, size);
     }
 
     private void exportResults(List<ConsumerRecord<String, String>> records, int testNumber, int messageCount, int messageSize){

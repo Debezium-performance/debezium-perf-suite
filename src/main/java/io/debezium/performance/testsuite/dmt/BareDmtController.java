@@ -38,11 +38,12 @@ public class BareDmtController implements DmtController {
     }
 
     @Override
-    public LoadResult generateSqlBatchLoad(int count, int maxRows) {
+    public LoadResult generateSqlBatchLoad(int count, int maxRows, int messageSize) {
         Map<String, String> queryParameters = new HashMap<>();
         queryParameters.put("count", String.valueOf(count));
         queryParameters.put("maxRows", String.valueOf(maxRows));
-        return useCustomPostEndpoint("GenerateBatchLoad", queryParameters);
+        queryParameters.put("messageSize", String.valueOf(messageSize));
+        return useCustomPostEndpoint("GenerateSizedBatchLoad", queryParameters);
     }
 
     @Override
