@@ -72,6 +72,7 @@ public class KafkaConsumerController {
             }
             i++;
         }
+        LOG.info("Finished consuming from Kafka");
         return collection;
     }
 
