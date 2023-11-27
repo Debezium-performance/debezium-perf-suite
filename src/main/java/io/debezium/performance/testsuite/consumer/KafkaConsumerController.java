@@ -62,10 +62,15 @@ public class KafkaConsumerController {
     public List<ConsumerRecord<String, String>> getRecords(String topic, int count) {
         List<ConsumerRecord<String, String>> collection = new ArrayList<>();
         consumer.subscribe(Collections.singleton(topic));
+        int i = 0;
         while (collection.size() < count) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.of(100, ChronoUnit.SECONDS));
             records.forEach(collection::add);
-            LOG.info("{}", collection.size());
+
+            if (i % 20 == 0) {
+                LOG.info("Read {} records so far", collection.size());
+            }
+            i++;
         }
         return collection;
     }
@@ -109,7 +114,7 @@ public class KafkaConsumerController {
         Properties consumerProps = new Properties();
         consumerProps.put(BOOTSTRAP_SERVERS_CONFIG, KAFKA_BOOTSTRAP_SERVERS);
         consumerProps.put(GROUP_ID_CONFIG, "2");
-        consumerProps.put(AUTO_OFFSET_RESET_CONFIG, "earliest");
+        consumerProps.put(AUTO_OFFSET_RESET_CONFIG, "latest");
         consumerProps.put(ENABLE_AUTO_COMMIT_CONFIG, true);
         consumerProps.put(KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         consumerProps.put(VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
