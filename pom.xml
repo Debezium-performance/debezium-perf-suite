@@ -27,6 +27,7 @@
     <kafka.bootstrap.servers></kafka.bootstrap.servers>
     <kafka.topic></kafka.topic>
     <result.database></result.database>
+    <schema.included></schema.included>
   </properties>
 
   <reporting>
@@ -190,6 +191,7 @@
             <test.kafka.bootstrap.servers>${kafka.bootstrap.servers}</test.kafka.bootstrap.servers>
             <test.kafka.topic>${kafka.topic}</test.kafka.topic>
             <test.result.database>${result.database}</test.result.database>
+            <test.schema.included>${schema.included}</test.schema.included>
           </systemPropertyVariables>
         </configuration>
         <executions>
